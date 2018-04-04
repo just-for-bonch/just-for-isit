@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/bootstrap-grid.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+<div id="app">  
+  <div class="preload"><img src="load.svg"></div>
+  <transition name="fade" mode="out-in">
+    <div v-if="show === 'start'" class="start" key="start" v-cloak>
+      <button v-on:click="show = 'test'">Начать тест</button>
+    </div><!-- end start -->
+
+    <div v-if="show === 'test'" class="test" key="test" v-cloak>
+      <div v-for="(option, index) in options">
+        <transition name="fade" mode="out-in">
+        <div v-if="id === index" key="index" class="question">
+          <div v-if="isAnswer === false">
+            <h4>{{ questions[index].question }}</h4>
+            <img :src="questions[index].img">
+            <div v-for="opt in option">
+              <div v-for="(value, index) in opt">
+                <input type="checkbox" v-bind:id="'checkbox-' + index" v-bind:value="index" v-model="checkedValue" class="checkbox-none">
+                <label v-bind:for="'checkbox-' + index">{{ value }}</label>    
+              </div>
+            </div>
+            <button class="btn-next" v-on:click="toAnswer">{{ button }}</button>
+            <div class="progress"><div v-bind:style="{ width: (((id + 1) / options.length) * 100) + '%' }" >%</div></div>
+          </div>
+          <div v-if="isAnswer" key="index" class="answer">
+            <div class="">
+              <h4>{{ isCorrect }}</h4>
+              <img :src="questions[index].imgAnswer">
+              <button class="btn-next" v-on:click="next">{{ button }}</button>
+            </div>
+          </div>
+        </div>
+      </transition>
+      </div>
+    </div><!-- end test -->
+
+    <div v-if="show === 'result'" class="result" key="result" v-cloak>
+      <h2>Итог</h2>
+      <p>У вас {{ correct.length }} из 9 правильных ответов.</p>
+      <button v-on:click="start">Пройти заново</button>
+    </div><!-- end relult -->
+  </transition>
+</div><!-- end -->
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
